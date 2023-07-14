@@ -6,6 +6,10 @@ defmodule Warehouse.Deliverator do
     GenServer.start(__MODULE__, [])
   end
 
+  def init(init_arg) do
+    {:ok, init_arg}
+  end
+
   def deliver_packages(pid, packages) do
     GenServer.cast(pid, {:deliver_packages, packages})
   end
@@ -15,7 +19,7 @@ defmodule Warehouse.Deliverator do
     {:noreply, state}
   end
 
-  defp deliver([]), do: Process.exit(self(), :normal)
+  defp deliver([]), do: send(Receiver, {:deliverator_idle, self()})
 
   defp deliver([package | remaining_packages]) do
     IO.puts("Deliverator #{inspect(self())} delivering #{inspect(package)}")

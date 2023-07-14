@@ -7,7 +7,8 @@ defmodule Warehouse.Supervisor do
 
   def init(_) do
     children = [
-      {Warehouse.Receiver, []}
+      {Warehouse.Receiver, []},
+      {Warehouse.DeliveratorPool, []}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
